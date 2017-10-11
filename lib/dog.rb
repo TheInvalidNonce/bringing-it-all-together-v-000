@@ -40,7 +40,7 @@ class Dog
 
   def self.find_by_name(name)
     sql = "SELECT * FROM dogs WHERE name = ? LIMIT 1"
-    
+
     DB[:conn].execute(sql, name).map { |row| self.new_from_db(row) }.first
   end
 
@@ -54,14 +54,13 @@ class Dog
     sql = "SELECT * FROM dogs WHERE name = ? AND breed = ?"
     dog = DB[:conn].execute(sql, name, breed)
 
-    dog_info = dog[0]
+    row = dog[0]
 
     if !dog.empty?
-      dog = self.new(id: dog_info[0], name: dog_info[1], breed: dog_info[2])
+      self.new_from_db(row)
     else
       dog = self.create(name: name, breed: breed)
     end
-    dog
   end
 
   ## Instance Methods ##
